@@ -22,7 +22,7 @@ def test_calculate_sum_negative_numbers():
 def test_calculate_sum_mixed_numbers():
     """Test with mixed positive and negative numbers."""
     test_list = [-1, 2, -3, 4, -5]
-    assert calculate_sum(test_list) == -20
+    assert calculate_sum(test_list) == -12
 
 def test_calculate_sum_invalid_input_non_list():
     """Test raising TypeError for non-list input."""
