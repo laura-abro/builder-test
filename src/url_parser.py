@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 from typing import Dict, Any, Optional
 
 def parse_url(url: str) -> Dict[str, Any]:
@@ -22,17 +22,20 @@ def parse_url(url: str) -> Dict[str, Any]:
         # Use urlparse to break down the URL
         parsed = urlparse(url)
         
-        # Extract query parameters using parse_qs
+        # Extract query parameters using parse_qs and decode them
         query_params = parse_qs(parsed.query)
         
-        # Flatten single-item lists in query params
-        query_params = {k: v[0] if len(v) == 1 else v for k, v in query_params.items()}
+        # Flatten single-item lists in query params and decode values
+        query_params = {
+            k: unquote(v[0]) if len(v) == 1 else [unquote(item) for item in v] 
+            for k, v in query_params.items()
+        }
         
         # Construct and return the parsed URL components
         return {
             'scheme': parsed.scheme or None,
             'netloc': parsed.netloc or None,
-            'path': parsed.path or None,
+            'path': unquote(parsed.path) or None,
             'params': parsed.params or None,
             'query': query_params,
             'fragment': parsed.fragment or None,
