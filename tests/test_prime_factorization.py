@@ -1,5 +1,28 @@
 import pytest
-from src.prime_factorization import prime_factorization
+from src.prime_factorization import prime_factorization, is_prime
+
+def test_is_prime():
+    """Test the is_prime function."""
+    # Known prime numbers
+    assert is_prime(2) == True
+    assert is_prime(3) == True
+    assert is_prime(7) == True
+    assert is_prime(11) == True
+    assert is_prime(17) == True
+    assert is_prime(29) == True
+
+    # Known non-prime numbers
+    assert is_prime(1) == False
+    assert is_prime(0) == False
+    assert is_prime(-5) == False
+    assert is_prime(4) == False
+    assert is_prime(6) == False
+    assert is_prime(15) == False
+    assert is_prime(100) == False
+
+    # Error cases
+    with pytest.raises(ValueError, match="Input must be an integer"):
+        is_prime("12")
 
 def test_prime_factorization_basic():
     """Test basic prime factorization scenarios."""
