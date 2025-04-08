@@ -1,3 +1,6 @@
+from src.is_prime import is_prime
+from collections import Counter
+
 def prime_factorization(n):
     """
     Compute the prime factorization of a given positive integer.
@@ -6,7 +9,7 @@ def prime_factorization(n):
         n (int): A positive integer to factorize.
     
     Returns:
-        list: A list of prime factors in ascending order.
+        dict: A dictionary with prime factors as keys and their frequencies as values.
     
     Raises:
         ValueError: If the input is less than 2.
@@ -31,13 +34,18 @@ def prime_factorization(n):
     factor = 3
     while factor * factor <= n:
         if n % factor == 0:
-            factors.append(factor)
-            n //= factor
+            # Verify factor is prime
+            if is_prime(factor):
+                factors.append(factor)
+                n //= factor
+            else:
+                factor += 2
         else:
             factor += 2
     
     # If n is a prime number greater than 2
-    if n > 2:
+    if n > 2 and is_prime(n):
         factors.append(n)
     
-    return factors
+    # Use Counter to convert list to frequency dictionary
+    return dict(Counter(factors))
