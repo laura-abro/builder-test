@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 from typing import Dict, Any, Optional
 
 def parse_url(url: str) -> Dict[str, Any]:
@@ -13,7 +13,7 @@ def parse_url(url: str) -> Dict[str, Any]:
         - protocol: The URL protocol (http, https, etc.)
         - domain: The domain name
         - path: The path component of the URL
-        - query_params: A dictionary of query parameters
+        - query_params: A dictionary of URL-decoded query parameters
         - port: The port number (if specified, otherwise None)
         - fragment: The fragment identifier (if present, otherwise None)
 
@@ -28,12 +28,19 @@ def parse_url(url: str) -> Dict[str, Any]:
         # Use urlparse to break down the URL
         parsed_url = urlparse(url)
 
-        # Extract components
+        # Decode query parameters
+        query_params = parse_qs(parsed_url.query, keep_blank_values=True)
+        # URL-decode parameter values
+        decoded_query_params = {
+            k: [unquote(v) for v in vals] 
+            for k, vals in query_params.items()
+        }
+
         return {
             'protocol': parsed_url.scheme or None,
             'domain': parsed_url.hostname or None,
             'path': parsed_url.path or None,
-            'query_params': parse_qs(parsed_url.query) if parsed_url.query else {},
+            'query_params': decoded_query_params,
             'port': parsed_url.port,
             'fragment': parsed_url.fragment or None
         }
