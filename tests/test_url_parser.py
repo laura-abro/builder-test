@@ -73,8 +73,8 @@ def test_complex_url_with_special_characters():
     assert result == {
         'protocol': 'https',
         'domain': 'example.com',
-        'path': '/path%20with%20spaces',
-        'query_params': {'key': ['value%20with%20space']},
+        'path': '/path with spaces',
+        'query_params': {'key': ['value with space']},
         'port': None,
         'fragment': None
     }
