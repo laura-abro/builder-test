@@ -1,3 +1,38 @@
+def is_prime(n):
+    """
+    Check if a given number is prime.
+
+    Args:
+        n (int): A positive integer to check for primality.
+
+    Returns:
+        bool: True if the number is prime, False otherwise.
+
+    Raises:
+        ValueError: If the input is not a positive integer.
+    """
+    # Validate input
+    if not isinstance(n, int):
+        raise ValueError("Input must be an integer")
+    
+    if n <= 1:
+        return False
+    
+    # 2 is the only even prime number
+    if n == 2:
+        return True
+    
+    # Even numbers greater than 2 are not prime
+    if n % 2 == 0:
+        return False
+    
+    # Check odd factors up to sqrt(n)
+    for factor in range(3, int(n**0.5) + 1, 2):
+        if n % factor == 0:
+            return False
+    
+    return True
+
 def prime_factorization(n):
     """
     Compute the prime factorization of a given positive integer.
@@ -25,22 +60,17 @@ def prime_factorization(n):
     # List to store prime factors
     factors = []
     
-    # Handle 2 as a special case first
-    while n % 2 == 0:
-        factors.append(2)
-        n //= 2
+    # Try to divide by prime factors
+    for potential_factor in range(2, int(n**0.5) + 1):
+        # Only use prime factors
+        if is_prime(potential_factor):
+            # Keep dividing while divisible
+            while n % potential_factor == 0:
+                factors.append(potential_factor)
+                n //= potential_factor
     
-    # Check odd factors up to sqrt(n)
-    factor = 3
-    while factor * factor <= n:
-        if n % factor == 0:
-            factors.append(factor)
-            n //= factor
-        else:
-            factor += 2
-    
-    # If n is a prime greater than 2
-    if n > 2:
+    # If the remaining number is greater than 1, it must be a prime
+    if n > 1:
         factors.append(n)
     
     return factors
