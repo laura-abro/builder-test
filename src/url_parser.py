@@ -12,7 +12,7 @@ def parse_url(url: str) -> Dict[str, Any]:
         Dict[str, Any]: A dictionary containing URL components:
         - protocol: The URL protocol (http, https, etc.)
         - domain: The domain name
-        - path: The path component of the URL
+        - path: The URL-decoded path component
         - query_params: A dictionary of URL-decoded query parameters
         - port: The port number (if specified, otherwise None)
         - fragment: The fragment identifier (if present, otherwise None)
@@ -36,10 +36,13 @@ def parse_url(url: str) -> Dict[str, Any]:
             for k, vals in query_params.items()
         }
 
+        # Decode path if exists
+        decoded_path = unquote(parsed_url.path) if parsed_url.path else None
+
         return {
             'protocol': parsed_url.scheme or None,
             'domain': parsed_url.hostname or None,
-            'path': parsed_url.path or None,
+            'path': decoded_path,
             'query_params': decoded_query_params,
             'port': parsed_url.port,
             'fragment': parsed_url.fragment or None
