@@ -1,0 +1,41 @@
+from urllib.parse import urlparse, parse_qs
+from typing import Dict, Any, Optional
+
+def parse_url(url: str) -> Dict[str, Any]:
+    """
+    Parse a given URL into its components.
+
+    Args:
+        url (str): The URL to be parsed.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing URL components:
+        - protocol: The URL protocol (http, https, etc.)
+        - domain: The domain name
+        - path: The path component of the URL
+        - query_params: A dictionary of query parameters
+        - port: The port number (if specified, otherwise None)
+        - fragment: The fragment identifier (if present, otherwise None)
+
+    Raises:
+        ValueError: If the input URL is invalid or empty.
+    """
+    # Check for empty or None input
+    if not url or not isinstance(url, str):
+        raise ValueError("Invalid URL: URL must be a non-empty string")
+
+    try:
+        # Use urlparse to break down the URL
+        parsed_url = urlparse(url)
+
+        # Extract components
+        return {
+            'protocol': parsed_url.scheme or None,
+            'domain': parsed_url.hostname or None,
+            'path': parsed_url.path or None,
+            'query_params': parse_qs(parsed_url.query) if parsed_url.query else {},
+            'port': parsed_url.port,
+            'fragment': parsed_url.fragment or None
+        }
+    except Exception as e:
+        raise ValueError(f"Error parsing URL: {str(e)}")
