@@ -19,6 +19,12 @@ def parse_url(url: str) -> Dict[str, Any]:
         raise ValueError("Invalid URL: URL must be a non-empty string")
     
     try:
+        # Validate URL has a scheme or contains valid path characters
+        if not any(url.startswith(scheme + ':') for scheme in ['http', 'https', 'ftp', 'file']) and \
+           not url.startswith('/') and \
+           not (url[0].isalnum() and '.' in url):
+            raise ValueError("Malformed URL")
+        
         # Use urlparse to break down the URL
         parsed_url = urlparse(url)
         
