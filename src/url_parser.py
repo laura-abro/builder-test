@@ -32,8 +32,8 @@ def parse_url(url: str) -> Dict[str, Any]:
 
         # Construct and return the parsed URL dictionary
         return {
-            "scheme": parsed_url.scheme or None,
-            "netloc": parsed_url.netloc or None,
+            "scheme": parsed_url.scheme or '',
+            "netloc": parsed_url.netloc or '',
             "path": decoded_path or None,
             "params": parsed_url.params or None,
             "query": query_params,
@@ -47,8 +47,8 @@ def parse_url(url: str) -> Dict[str, Any]:
         # Catch any unexpected parsing errors
         # For malformed URLs, treat the entire input as the path
         return {
-            "scheme": None,
-            "netloc": None,
+            "scheme": '',
+            "netloc": '',
             "path": url,
             "params": None,
             "query": {},
