@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 from typing import Dict, Any, Optional
 
 def parse_url(url: str) -> Dict[str, Any]:
@@ -22,6 +22,9 @@ def parse_url(url: str) -> Dict[str, Any]:
         # Use urlparse to break down the URL
         parsed_url = urlparse(url)
 
+        # Decode path to handle URL-encoded characters
+        decoded_path = unquote(parsed_url.path) if parsed_url.path else None
+
         # Extract query parameters
         query_params = parse_qs(parsed_url.query)
         # Convert query params to single values if they have only one element
@@ -31,7 +34,7 @@ def parse_url(url: str) -> Dict[str, Any]:
         return {
             "scheme": parsed_url.scheme or None,
             "netloc": parsed_url.netloc or None,
-            "path": parsed_url.path or None,
+            "path": decoded_path or None,
             "params": parsed_url.params or None,
             "query": query_params,
             "fragment": parsed_url.fragment or None,
@@ -42,4 +45,16 @@ def parse_url(url: str) -> Dict[str, Any]:
         }
     except Exception as e:
         # Catch any unexpected parsing errors
-        raise ValueError(f"Error parsing URL: {str(e)}")
+        # For malformed URLs, treat the entire input as the path
+        return {
+            "scheme": None,
+            "netloc": None,
+            "path": url,
+            "params": None,
+            "query": {},
+            "fragment": None,
+            "username": None,
+            "password": None,
+            "hostname": None,
+            "port": None
+        }
