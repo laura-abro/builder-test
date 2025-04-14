@@ -1,3 +1,4 @@
+from collections import Counter
 from src.prime_factorization import prime_factorization
 
 def gcd_using_prime_factors(a: int, b: int) -> int:
@@ -26,8 +27,8 @@ def gcd_using_prime_factors(a: int, b: int) -> int:
         return a
     
     # Get prime factorizations
-    a_factors = prime_factorization(a)
-    b_factors = prime_factorization(b)
+    a_factors = Counter(prime_factorization(a))
+    b_factors = Counter(prime_factorization(b))
     
     # Find common prime factors
     gcd = 1
