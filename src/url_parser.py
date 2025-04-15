@@ -13,7 +13,7 @@ def parse_url(url: str) -> Dict[str, Any]:
         - protocol: The URL protocol (e.g., 'http', 'https')
         - domain: The domain name
         - port: The port number (None if not specified)
-        - path: The path component of the URL
+        - path: The path component of the URL (preserving original encoding)
         - query_params: A dictionary of query parameters (with URL decoding)
         - fragment: The fragment identifier (if present)
 
@@ -32,7 +32,7 @@ def parse_url(url: str) -> Dict[str, Any]:
         protocol = parsed_url.scheme
         domain = parsed_url.hostname
         port = parsed_url.port
-        path = parsed_url.path
+        path = parsed_url.path  # Keep original path encoding
         fragment = parsed_url.fragment
 
         # Parse query parameters with URL decoding
