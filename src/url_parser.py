@@ -1,4 +1,4 @@
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 from typing import Dict, Any, Optional
 
 def parse_url(url: str) -> Dict[str, Any]:
@@ -14,7 +14,7 @@ def parse_url(url: str) -> Dict[str, Any]:
         - domain: The domain name
         - port: The port number (None if not specified)
         - path: The path component of the URL
-        - query_params: A dictionary of query parameters
+        - query_params: A dictionary of query parameters (with URL decoding)
         - fragment: The fragment identifier (if present)
 
     Raises:
@@ -35,10 +35,15 @@ def parse_url(url: str) -> Dict[str, Any]:
         path = parsed_url.path
         fragment = parsed_url.fragment
 
-        # Parse query parameters
-        query_params = parse_qs(parsed_url.query)
-        # Convert single-item lists to their values for cleaner output
-        query_params = {k: v[0] if len(v) == 1 else v for k, v in query_params.items()}
+        # Parse query parameters with URL decoding
+        query_params = parse_qs(parsed_url.query, keep_blank_values=True)
+        
+        # Decode query parameters and convert lists/single items
+        query_params = {
+            unquote(k): unquote(v[0]) if len(v) == 1 
+            else [unquote(item) for item in v] 
+            for k, v in query_params.items()
+        }
 
         # Validate protocol
         if not protocol:
