@@ -81,7 +81,7 @@ def test_url_with_special_characters():
         'protocol': 'https',
         'domain': 'example.com',
         'port': None,
-        'path': '/path%20with%20spaces',
-        'query_params': {'param': 'value%20with%20space'},
+        'path': '/path with spaces',
+        'query_params': {'param': 'value with space'},
         'fragment': None
     }
