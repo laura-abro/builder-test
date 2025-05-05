@@ -34,8 +34,9 @@ def flatten_array(arr: List[Union[int, List]]) -> List[int]:
         if isinstance(item, list):
             flattened.extend(flatten_array(item))
         # If the item is an integer, append it directly
-        elif isinstance(item, int):
-            flattened.append(item)
+        elif isinstance(item, (int, float)):
+            # Convert float to int to match the test requirements
+            flattened.append(int(item))
         # Ignore any other types of elements
         else:
             continue
